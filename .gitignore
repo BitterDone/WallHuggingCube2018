@@ -10,6 +10,10 @@
 /[Ll]ogs/
 /[Mm]emoryCaptures/
 /app*/
+/Assets/MixedRealityToolkit*/
+/Assets/MRTK/
+/Assets/Dependencies/net46/
+/MSBuild/
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta

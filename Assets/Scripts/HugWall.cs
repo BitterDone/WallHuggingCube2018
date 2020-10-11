@@ -6,11 +6,37 @@ public class HugWall : MonoBehaviour
 {
     public GameObject cube;
     public Camera mainCamera;
-
-    // Start is called before the first frame update
-    void Start()
+    Color _red = new Color(1, 0, 0, 1);
+    Color _blue = new Color(0, 0, 1, 1);
+    int counter = 0;
+    private void InteractionManager_InteractionSourcePressed(UnityEngine.XR.WSA.Input.InteractionSourcePressedEventArgs obj)
     {
-        
+        var color = cube.GetComponent<Renderer>().material.color;//GetColor("_Color");
+        Debug.Log("didi the thing " + color); 
+        if (obj.pressType == UnityEngine.XR.WSA.Input.InteractionSourcePressType.Select)
+        {
+            // GetComponent<Renderer>().material.color = kubus.GetComponent<Renderer>().material.GetColor("_Color");
+            // OnSelectInteraction();
+            // change cube color
+            
+            switch (counter) {
+                case 0:
+                    cube.GetComponent<Renderer>().material.color = Color.blue;
+                    break;
+                case 1:
+                    cube.GetComponent<Renderer>().material.color = Color.red;
+                    break;
+                default:
+                    cube.GetComponent<Renderer>().material.color = Color.yellow;
+                    break;
+            };
+
+            counter++;
+            if (counter > 1)
+            {
+                counter = 0;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -25,6 +51,11 @@ public class HugWall : MonoBehaviour
         }
 
         cube.transform.position = cubeLocation;
+
+        // if(Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     InteractionManager_InteractionSourcePressed();
+        // }
     }
 
     private bool TryGazeHitTest(out RaycastHit target)
@@ -43,4 +74,18 @@ public class HugWall : MonoBehaviour
         return Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out target, Mathf.Infinity, layerMask);
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        UnityEngine.XR.WSA.Input.InteractionManager.InteractionSourcePressed += InteractionManager_InteractionSourcePressed;
+
+        // Debug.Log("Color =  " + cube.GetComponent<Renderer>().material.color);
+        // Debug.Log(Color.red == RGBA(1.000, 0.000, 0.000, 1.000));
+        // Debug.Log(Color.red == new Color(1, 0, 0, 1)); // true
+    }
+
+    void OnDestroy()
+    {
+        UnityEngine.XR.WSA.Input.InteractionManager.InteractionSourcePressed -= InteractionManager_InteractionSourcePressed;
+    }
 }
